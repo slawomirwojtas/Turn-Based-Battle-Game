@@ -70,8 +70,8 @@ class Person:
 
     def choose_action(self):
         i = 1
-        print("\n" + bcolors.BOLD + self.name + bcolors.ENDC)
-        print("\n" + bcolors.FAIL + bcolors.BOLD + "ACTIONS:" + bcolors.ENDC)
+        print("\n\n" + bcolors.UNDERLINE + bcolors.BOLD + 40*" " + self.name + "'s turn" + bcolors.ENDC)
+        print("\n" + bcolors.BOLD + "ACTIONS:" + bcolors.ENDC)
         for item in self.actions:
             print("    " + str(i) + ".", item)
             i += 1
@@ -89,21 +89,6 @@ class Person:
         for item in self.items:
             print("    " + str(i) + ".", item["item"].name, ":", item["item"].description, "(x" + str(item["quantity"]) + ")")
             i += 1
-
-    # def choose_target(self, enemies):
-    #     """Lists enemies and takes target for action."""
-    #     i = 1
-    #     print("\n" + bcolors.FAIL + bcolors.BOLD + "TARGET:" + bcolors.ENDC)
-    #     for enemy in enemies:
-    #         print(str(i) + ".", enemy.name)
-    #         i += 1
-    #         # if enemy.get_hp() != 0:
-    #         #     print(str(i) + ".", enemy.name)
-    #         #     i+= 1
-    #         choice = int(input("Choose target: ")) - 1
-    #         return choice
-
-
 
 
     def get_stats(self):
@@ -168,17 +153,16 @@ def turn_end_step(players, enemies):
 def choose_target(enemies):
     """Lists enemies and takes target for action."""
     i = 1
-    print("\n" + bcolors.FAIL + bcolors.BOLD + "TARGET:" + bcolors.ENDC)
-    print("enemies list that long:", len(enemies))
+    print("\n" + bcolors.BOLD + "TARGET:" + bcolors.ENDC)
     for enemy in enemies:
         print(str(i) + ".", enemy.name)
         i += 1
-        # if enemy.get_hp() != 0:
-        #     print(str(i) + ".", enemy.name)
-        #     i+= 1
-    choice = int(input("Choose target: ")) - 1
+    choice = int(input(bcolors.BOLD + bcolors.UNDERLINE + "Choose target" + bcolors.ENDC + ": ")) - 1
     return choice
 
+
+def start_turn(players, enemies):
+    print('Turn 1')
 
 
 

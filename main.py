@@ -6,12 +6,6 @@ from classes.magic import Spell
 from classes.inventory import Item
 import random
 
-# print("\n\n")
-# print("NAME                     HP                                     MP")
-# print("                         _________________________              __________")
-# print(bcolors.BOLD + "Valos:        460/460   |" + bcolors.OKGREEN +"████████                 " + bcolors.ENDC + bcolors.BOLD + "|    65/65   |" + bcolors.OKBLUE + "███       " + bcolors.ENDC + bcolors.BOLD + "|" + bcolors.ENDC)
-
-
 
 
 # Instantiate Spells (name, cost, dmg, type)
@@ -52,25 +46,22 @@ enemies = [enemy1, enemy2]
 running = True
 i = 0
 
-print(bcolors.FAIL + bcolors.BOLD + "AN ENEMY ATTACKS!" + bcolors.ENDC)
+# ======================================================================================================================
+# START GAME
+
+print("\n" + bcolors.FAIL + bcolors.BOLD + "AN ENEMY ATTACKS!" + bcolors.ENDC + "\n")
+
 while running:
-    print("============================================================================================")
 
-    print("NAME                       HP                                     MP")
-    # for player in players:
-    #     player.get_stats()
-    #
-    # for enemy in enemies:
-    #     enemy.get_enemy_stats()
-
+    #print("============================================================================================")
+    print(bcolors.BOLD + "NAME                       HP                                     MP" + bcolors.ENDC)
 
     for player in players:
 
         turn_start_step(players=players, enemies=enemies)
-        print(player.name, "turn")
 
         player.choose_action()
-        choice = int(input("Choose action: ")) - 1 # take 1 from the input to represent 0: indexing
+        choice = int(input(bcolors.BOLD + bcolors.UNDERLINE + "Choose action" + bcolors.ENDC + ": ")) - 1 # take 1 from the input to represent 0: indexing
         #index = int(choice) - 1
 
         # Choice Attack
@@ -79,7 +70,8 @@ while running:
             enemy_idx = choose_target(enemies=enemies)
 
             enemies[enemy_idx].take_damage(dmg)
-            print(player.name, "attacks", enemies[enemy_idx].name, "for", dmg, "points of damage.")
+            # Valos attacks Imp for 65 points of damage.
+            print("\n" + player.name, "attacks", enemies[enemy_idx].name, "for", dmg, "points of damage.")
 
             score = turn_end_step(players=players, enemies=enemies)
             # if enemies[enemy].get_hp() == 0:
@@ -88,9 +80,8 @@ while running:
 
         # Choice Magic
         elif choice == 1:
-            print("Spells")
             player.choose_magic()
-            magic_choice = int(input("Choose spell: ")) - 1
+            magic_choice = int(input(bcolors.BOLD + bcolors.UNDERLINE + "Choose spell" + bcolors.ENDC + ": ")) - 1
 
             if magic_choice == -1:
                 continue
@@ -110,8 +101,10 @@ while running:
                 player.heal(magic_dmg)
                 print(bcolors.OKBLUE + "\n" + spell.name, "heals for", str(magic_dmg), "HP." + bcolors.ENDC)
             elif spell.type == "black":
-                enemy.take_damage(magic_dmg)
-                print(bcolors.OKBLUE + "\n" + spell.name + " deals", str(magic_dmg), "points of damage." + bcolors.ENDC)
+                enemy_idx = choose_target(enemies=enemies)
+                enemies[enemy_idx].take_damage(magic_dmg)
+                #
+                print("\n" + player.name + "'s", spell.name + " deals", str(magic_dmg), "points to", enemies[enemy_idx].name + "." + bcolors.ENDC)
 
         # Choice Item
         elif choice == 2:
@@ -155,7 +148,8 @@ while running:
     for enemy in enemies:
 
         turn_start_step(players, enemies)
-        print(enemy.name, "turn")
+        print("\n\n" + bcolors.UNDERLINE + bcolors.BOLD + 40 * " " + enemy.name + "'s turn" + bcolors.ENDC)
+        #print("\n" enemy.name, "turn")
         #enemy_choice = 1
         # implement different actions
         # use random for actions
@@ -167,9 +161,9 @@ while running:
         target = random.randrange(0,len(players))
         enemy_dmg = enemy.generate_damage()
         players[target].take_damage(enemy_dmg)
-        #print(enemies[enemy].name, "Enemy attacks", players[target].name, "for", enemy_dmg, "points of damage.")
+        print("\n" + enemy.name, "attacks", players[target].name, "for", enemy_dmg, "points of damage.")
         score = turn_end_step(players=players, enemies=enemies)
-        print("end step ok")
+
 
 
     # print("--------------------------------------")
