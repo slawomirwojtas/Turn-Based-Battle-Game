@@ -26,7 +26,7 @@ megaelixir = Item("Mega-Elixir", "elixir", "Fully restores HP/MP of each party m
 grenade = Item("Grenade", "attack", "Deals 500 damage", 500)
 
 
-# Instantiate Characters (name, hp, mp, atk, df, magic, items)
+# Instantiate Characters (name, speed, hp, mp, dmgl, dmgh, magic, items)
 player_spells = [fire, thunder, blizzard, meteor, cure, cura]
 player_items = [{"item": potion, "quantity": 2},
                 {"item": hipotion, "quantity": 5},
@@ -34,11 +34,11 @@ player_items = [{"item": potion, "quantity": 2},
                 {"item": elixir, "quantity": 5},
                 {"item": megaelixir, "quantity": 5},
                 {"item": grenade, "quantity": 5}]
-player1 = Person("Valos", 300, 65, 60, 34, player_spells, player_items)
-player2 = Person("Nick", 350, 65, 60, 34, player_spells, player_items)
-player3 = Person("Robot", 200, 65, 60, 34, player_spells, player_items)
-enemy1 = Person("Magus", 3000, 100, 150, 250, [], [])
-enemy2 = Person("Imp", 1000, 100, 50, 250, [], [])
+player1 = Person("Valos", 3, 300, 65, 50, 50, player_spells, player_items)
+player2 = Person("Nick", 3, 250, 30, 10, 70, player_spells, player_items)
+player3 = Person("Robot", 2, 200, 20, 25, 40, player_spells, player_items)
+enemy1 = Person("Magus", 4, 3000, 100, 150, 250, [], [])
+enemy2 = Person("Imp", 1, 1000, 100, 50, 150, [], [])
 
 players = [player1, player2, player3]
 enemies = [enemy1, enemy2]
@@ -48,6 +48,44 @@ i = 0
 
 # ======================================================================================================================
 # START GAME
+
+"""
+at the beggining of turn set turn order
+during turn effects might change the speed so it has to be re-rolled but without players who already made action
+
+# remove item from a list
+list.remove(item)
+"""
+
+# Create turn queue
+turn_queue = players + enemies
+# shuffle and sort list by the item's attribute
+random.shuffle(turn_queue)
+turn_queue.sort(key=lambda x: x.speed, reverse=True)
+for item in turn_queue:
+    print(item.name, item.speed)
+turn_ended = []
+
+# Simulate turn flow (magus kills nick, valos kills imp)
+for item in turn_queue:
+    print(item.name)
+    turn_ended.append(item)
+    if item.name == "Magus":
+        turn_queue.remove(player2)
+        print(f"{item.name} kills Nick, skip")
+
+print("\n had turn")
+for item in turn_ended:
+    print(item.name)
+
+"""
+TURN
+set queue
+for player in queue
+ if player in enemies: then play AI
+ else: choose action
+ then recreate queue 
+"""
 
 print("\n" + bcolors.FAIL + bcolors.BOLD + "AN ENEMY ATTACKS!" + bcolors.ENDC + "\n")
 
@@ -66,9 +104,8 @@ while running:
 
         # Choice Attack
         if choice == 0:
-            dmg = player.generate_damage()
             enemy_idx = choose_target(enemies=enemies)
-
+            dmg = player.generate_damage()
             enemies[enemy_idx].take_damage(dmg)
             # Valos attacks Imp for 65 points of damage.
             print("\n" + player.name, "attacks", enemies[enemy_idx].name, "for", dmg, "points of damage.")

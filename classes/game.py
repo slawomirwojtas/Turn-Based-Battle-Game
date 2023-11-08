@@ -12,23 +12,38 @@ class bcolors:
     BOLD = '\033[1m'
     UNDERLINE = '\033[4m'
 
-
 class Person:
-    def __init__(self, name, hp, mp, atk, df, magic, items):
+    def __init__(self, name, speed, hp, mp, dmgl, dmgh, magic, items):
         self.name = name
+        self.speed = speed
         self.maxhp = hp
         self.hp = hp
         self.maxmp = mp
         self.mp = mp
-        self.atkl = atk - 10
-        self.atkh = atk + 10
-        self.df = df
+        self.dmgl = dmgl
+        self.dmgh = dmgh
         self.magic = magic
         self.items = items
         self.actions = ["Attack", "Magic", "Items"]
 
+
+
+# class Person:
+#     def __init__(self, name, hp, mp, atk, df, magic, items):
+#         self.name = name
+#         self.maxhp = hp
+#         self.hp = hp
+#         self.maxmp = mp
+#         self.mp = mp
+#         self.atkl = atk - 10
+#         self.atkh = atk + 10
+#         self.df = df
+#         self.magic = magic
+#         self.items = items
+#         self.actions = ["Attack", "Magic", "Items"]
+
     def generate_damage(self):
-        return random.randrange(self.atkl, self.atkh)
+        return random.randrange(self.dmgl, self.dmgh + 1)
 
     # def generate_spell_damage(self, i):
     #     mgl = self.magic[i]["dmg"] - 5
@@ -125,6 +140,7 @@ class Person:
 
 
 def turn_start_step(players, enemies):
+    """Shows stats of all combatants"""
     for player in players:
         player.get_stats()
 
