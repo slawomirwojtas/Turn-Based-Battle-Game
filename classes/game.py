@@ -85,7 +85,7 @@ class Person:
 
     def choose_action(self):
         i = 1
-        print("\n\n" + bcolors.UNDERLINE + bcolors.BOLD + 40*" " + self.name + "'s turn" + bcolors.ENDC)
+        #print("\n\n" + bcolors.UNDERLINE + bcolors.BOLD + 40*" " + self.name + "'s turn" + bcolors.ENDC)
         print("\n" + bcolors.BOLD + "ACTIONS:" + bcolors.ENDC)
         for item in self.actions:
             print("    " + str(i) + ".", item)
@@ -139,6 +139,23 @@ class Person:
 # GAME DEFINITIONS
 
 
+def print_stats(players, enemies):
+    """Shows stats of all combatants"""
+    for player in players:
+        player.get_stats()
+
+    for enemy in enemies:
+        enemy.get_enemy_stats()
+
+def turn_upkeep(players, enemies):
+    # Create turn queue
+    turn_queue = players + enemies
+    # shuffle and sort list by the item's attribute
+    random.shuffle(turn_queue)
+    turn_queue.sort(key=lambda x: x.speed, reverse=True)
+    return turn_queue
+
+
 def turn_start_step(players, enemies):
     """Shows stats of all combatants"""
     for player in players:
@@ -181,4 +198,8 @@ def start_turn(players, enemies):
     print('Turn 1')
 
 
-
+def enemy_ai(enemy, players):
+    target = random.randrange(0, len(players))
+    enemy_dmg = enemy.generate_damage()
+    players[target].take_damage(enemy_dmg)
+    print("\n" + enemy.name, "attacks", players[target].name, "for", enemy_dmg, "points of damage.")
